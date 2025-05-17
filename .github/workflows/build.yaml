@@ -2,7 +2,7 @@ name: Build
 on:
   push:
     tags:
-      - 'v*.*.*'
+      - 'v*.*.*+*'
 
 permissions:
   contents: write
@@ -15,6 +15,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: 'definev/zentab'
+          ref: refs/heads/main
           token: ${{ secrets.PAT }}
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
@@ -44,118 +45,118 @@ jobs:
         with:
           files: web.zip
 
-  build_ios:
-    runs-on: macos-latest
-    steps:
-      - name: Clone repository
-        uses: actions/checkout@v4
-        with:
-          repository: 'definev/zentab'
-          token: ${{ secrets.PAT }}
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: master
-      - name: Melos
-        uses: bluefireteam/melos-action@v3
-        with:
-          run-bootstrap: true
-      - name: Generate production.env from secrets
-        run: melos run cicd:env
-        env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-          REVENUE_CAT_IOS_KEY: ${{ secrets.REVENUE_CAT_IOS_KEY }}
-          REVENUE_CAT_ANDROID_KEY: ${{ secrets.REVENUE_CAT_ANDROID_KEY }}
-          ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
-          IOS_GOOGLE_CLIENT_ID: ${{ secrets.IOS_GOOGLE_CLIENT_ID }}
-          ANDROID_GOOGLE_CLIENT_ID: ${{ secrets.ANDROID_GOOGLE_CLIENT_ID }}
-          WEB_GOOGLE_CLIENT_ID: ${{ secrets.WEB_GOOGLE_CLIENT_ID }}
-          WEB_GOOGLE_SERVER_CLIENT_ID: ${{ secrets.WEB_GOOGLE_SERVER_CLIENT_ID }}
-      - run: cp production.env packages/zentab/env/production.env
-      - run: melos exec --scope="packages/zentab" -- rps build ios
-      - run: zip -r zentab.ipa packages/zentab/build/ios/iphoneos/Runner.app
-      - name: Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: zentab.ipa
+  # build_ios:
+  #   runs-on: macos-latest
+  #   steps:
+  #     - name: Clone repository
+  #       uses: actions/checkout@v4
+  #       with:
+  #         repository: 'definev/zentab'
+  #         token: ${{ secrets.PAT }}
+  #     - name: Set up Flutter
+  #       uses: subosito/flutter-action@v2
+  #       with:
+  #         channel: master
+  #     - name: Melos
+  #       uses: bluefireteam/melos-action@v3
+  #       with:
+  #         run-bootstrap: true
+  #     - name: Generate production.env from secrets
+  #       run: melos run cicd:env
+  #       env:
+  #         SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+  #         SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+  #         REVENUE_CAT_IOS_KEY: ${{ secrets.REVENUE_CAT_IOS_KEY }}
+  #         REVENUE_CAT_ANDROID_KEY: ${{ secrets.REVENUE_CAT_ANDROID_KEY }}
+  #         ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
+  #         IOS_GOOGLE_CLIENT_ID: ${{ secrets.IOS_GOOGLE_CLIENT_ID }}
+  #         ANDROID_GOOGLE_CLIENT_ID: ${{ secrets.ANDROID_GOOGLE_CLIENT_ID }}
+  #         WEB_GOOGLE_CLIENT_ID: ${{ secrets.WEB_GOOGLE_CLIENT_ID }}
+  #         WEB_GOOGLE_SERVER_CLIENT_ID: ${{ secrets.WEB_GOOGLE_SERVER_CLIENT_ID }}
+  #     - run: cp production.env packages/zentab/env/production.env
+  #     - run: melos exec --scope="packages/zentab" -- rps build ios
+  #     - run: zip -r zentab.ipa packages/zentab/build/ios/iphoneos/Runner.app
+  #     - name: Release
+  #       uses: softprops/action-gh-release@v2
+  #       with:
+  #         files: zentab.ipa
 
-  build_android:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Clone repository
-        uses: actions/checkout@v4
-        with:
-          repository: 'definev/zentab'
-          token: ${{ secrets.PAT }}
-      - name: Setup JDK 11
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu' # See 'Supported distributions' for available options
-          java-version: '17'
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: master
-      - name: Melos
-        uses: bluefireteam/melos-action@v3
-        with:
-          run-bootstrap: true
-      - name: Generate production.env from secrets
-        run: melos run cicd:env
-        env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-          REVENUE_CAT_IOS_KEY: ${{ secrets.REVENUE_CAT_IOS_KEY }}
-          REVENUE_CAT_ANDROID_KEY: ${{ secrets.REVENUE_CAT_ANDROID_KEY }}
-          ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
-          IOS_GOOGLE_CLIENT_ID: ${{ secrets.IOS_GOOGLE_CLIENT_ID }}
-          ANDROID_GOOGLE_CLIENT_ID: ${{ secrets.ANDROID_GOOGLE_CLIENT_ID }}
-          WEB_GOOGLE_CLIENT_ID: ${{ secrets.WEB_GOOGLE_CLIENT_ID }}
-          WEB_GOOGLE_SERVER_CLIENT_ID: ${{ secrets.WEB_GOOGLE_SERVER_CLIENT_ID }}
-      - run: cp production.env packages/zentab/env/production.env
-      - run: melos exec --scope="packages/zentab" -- rps build android
-      - name: Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: |
-            packages/zentab/build/app/outputs/apk/release/app-arm64-v8a-release.apk
-            packages/zentab/build/app/outputs/apk/release/app-armeabi-v7a-release.apk
-            packages/zentab/build/app/outputs/apk/release/app-x86_64-release.apk
-            packages/zentab/build/app/outputs/bundle/release/app-release.aab
+  # build_android:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Clone repository
+  #       uses: actions/checkout@v4
+  #       with:
+  #         repository: 'definev/zentab'
+  #         token: ${{ secrets.PAT }}
+  #     - name: Setup JDK 11
+  #       uses: actions/setup-java@v4
+  #       with:
+  #         distribution: 'zulu' # See 'Supported distributions' for available options
+  #         java-version: '17'
+  #     - name: Set up Flutter
+  #       uses: subosito/flutter-action@v2
+  #       with:
+  #         channel: master
+  #     - name: Melos
+  #       uses: bluefireteam/melos-action@v3
+  #       with:
+  #         run-bootstrap: true
+  #     - name: Generate production.env from secrets
+  #       run: melos run cicd:env
+  #       env:
+  #         SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+  #         SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+  #         REVENUE_CAT_IOS_KEY: ${{ secrets.REVENUE_CAT_IOS_KEY }}
+  #         REVENUE_CAT_ANDROID_KEY: ${{ secrets.REVENUE_CAT_ANDROID_KEY }}
+  #         ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
+  #         IOS_GOOGLE_CLIENT_ID: ${{ secrets.IOS_GOOGLE_CLIENT_ID }}
+  #         ANDROID_GOOGLE_CLIENT_ID: ${{ secrets.ANDROID_GOOGLE_CLIENT_ID }}
+  #         WEB_GOOGLE_CLIENT_ID: ${{ secrets.WEB_GOOGLE_CLIENT_ID }}
+  #         WEB_GOOGLE_SERVER_CLIENT_ID: ${{ secrets.WEB_GOOGLE_SERVER_CLIENT_ID }}
+  #     - run: cp production.env packages/zentab/env/production.env
+  #     - run: melos exec --scope="packages/zentab" -- rps build android
+  #     - name: Release
+  #       uses: softprops/action-gh-release@v2
+  #       with:
+  #         files: |
+  #           packages/zentab/build/app/outputs/apk/release/app-arm64-v8a-release.apk
+  #           packages/zentab/build/app/outputs/apk/release/app-armeabi-v7a-release.apk
+  #           packages/zentab/build/app/outputs/apk/release/app-x86_64-release.apk
+  #           packages/zentab/build/app/outputs/bundle/release/app-release.aab
   
-  build_macos:
-    runs-on: macos-latest
-    steps:
-      - name: Clone repository
-        uses: actions/checkout@v4
-        with:
-          repository: 'definev/zentab'
-          token: ${{ secrets.PAT }}
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: master
-      - name: Melos
-        uses: bluefireteam/melos-action@v3
-        with:
-          run-bootstrap: true
-      - name: Generate production.env from secrets
-        run: melos run cicd:env
-        env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-          REVENUE_CAT_IOS_KEY: ${{ secrets.REVENUE_CAT_IOS_KEY }}
-          REVENUE_CAT_ANDROID_KEY: ${{ secrets.REVENUE_CAT_ANDROID_KEY }}
-          ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
-          IOS_GOOGLE_CLIENT_ID: ${{ secrets.IOS_GOOGLE_CLIENT_ID }}
-          ANDROID_GOOGLE_CLIENT_ID: ${{ secrets.ANDROID_GOOGLE_CLIENT_ID }}
-          WEB_GOOGLE_CLIENT_ID: ${{ secrets.WEB_GOOGLE_CLIENT_ID }}
-          WEB_GOOGLE_SERVER_CLIENT_ID: ${{ secrets.WEB_GOOGLE_SERVER_CLIENT_ID }}
-      - run: cp production.env packages/zentab/env/production.env
-      - run: melos exec --scope="packages/zentab" -- rps build macos
-      - run: mv packages/zentab/zentab.dmg zentab_macos.dmg
-      - name: Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: zentab_macos.dmg
+  # build_macos:
+  #   runs-on: macos-latest
+  #   steps:
+  #     - name: Clone repository
+  #       uses: actions/checkout@v4
+  #       with:
+  #         repository: 'definev/zentab'
+  #         token: ${{ secrets.PAT }}
+  #     - name: Set up Flutter
+  #       uses: subosito/flutter-action@v2
+  #       with:
+  #         channel: master
+  #     - name: Melos
+  #       uses: bluefireteam/melos-action@v3
+  #       with:
+  #         run-bootstrap: true
+  #     - name: Generate production.env from secrets
+  #       run: melos run cicd:env
+  #       env:
+  #         SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+  #         SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+  #         REVENUE_CAT_IOS_KEY: ${{ secrets.REVENUE_CAT_IOS_KEY }}
+  #         REVENUE_CAT_ANDROID_KEY: ${{ secrets.REVENUE_CAT_ANDROID_KEY }}
+  #         ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
+  #         IOS_GOOGLE_CLIENT_ID: ${{ secrets.IOS_GOOGLE_CLIENT_ID }}
+  #         ANDROID_GOOGLE_CLIENT_ID: ${{ secrets.ANDROID_GOOGLE_CLIENT_ID }}
+  #         WEB_GOOGLE_CLIENT_ID: ${{ secrets.WEB_GOOGLE_CLIENT_ID }}
+  #         WEB_GOOGLE_SERVER_CLIENT_ID: ${{ secrets.WEB_GOOGLE_SERVER_CLIENT_ID }}
+  #     - run: cp production.env packages/zentab/env/production.env
+  #     - run: melos exec --scope="packages/zentab" -- rps build macos
+  #     - run: mv packages/zentab/zentab.dmg zentab_macos.dmg
+  #     - name: Release
+  #       uses: softprops/action-gh-release@v2
+  #       with:
+  #         files: zentab_macos.dmg
