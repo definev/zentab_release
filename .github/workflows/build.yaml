@@ -38,6 +38,7 @@ jobs:
           WEB_GOOGLE_SERVER_CLIENT_ID: ${{ secrets.WEB_GOOGLE_SERVER_CLIENT_ID }}
       - run: cp production.env packages/zentab_extension/env/production.env
       - run: melos exec --scope="packages/zentab_extension" -- rps build web_ext
+      - run: ls -la packages/zentab_extension/
       - run: zip -r web.zip packages/zentab_extension/build/web
       - name: Release
         uses: softprops/action-gh-release@v2
