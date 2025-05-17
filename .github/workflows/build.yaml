@@ -20,10 +20,6 @@ jobs:
       - name: Set up fvm
         uses: kuhnroyal/flutter-fvm-config-action/setup@v3
         id: fvm-config-action
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ steps.fvm-config-action.outputs.FLUTTER_VERSION }}
-          channel: ${{ steps.fvm-config-action.outputs.FLUTTER_CHANNEL }}
       - name: Melos
         uses: bluefireteam/melos-action@v3
         with:
