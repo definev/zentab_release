@@ -20,7 +20,6 @@ jobs:
       - name: Set up fvm
         uses: kuhnroyal/flutter-fvm-config-action/setup@v3
         id: fvm-config-action
-      - run: fvm use master
       - name: Melos
         uses: bluefireteam/melos-action@v3
         with:
