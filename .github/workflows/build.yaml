@@ -24,6 +24,19 @@ jobs:
         uses: bluefireteam/melos-action@v3
         with:
           run-bootstrap: true
+      - name: Generate production.env from secrets
+        run: melos run cicd:env
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          REVENUE_CAT_IOS_KEY: ${{ secrets.REVENUE_CAT_IOS_KEY }}
+          REVENUE_CAT_ANDROID_KEY: ${{ secrets.REVENUE_CAT_ANDROID_KEY }}
+          ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
+          IOS_GOOGLE_CLIENT_ID: ${{ secrets.IOS_GOOGLE_CLIENT_ID }}
+          ANDROID_GOOGLE_CLIENT_ID: ${{ secrets.ANDROID_GOOGLE_CLIENT_ID }}
+          WEB_GOOGLE_CLIENT_ID: ${{ secrets.WEB_GOOGLE_CLIENT_ID }}
+          WEB_GOOGLE_SERVER_CLIENT_ID: ${{ secrets.WEB_GOOGLE_SERVER_CLIENT_ID }}
+      - run: cp production.env packages/zentab_extension/env/production.env
       - run: melos exec --scope="packages/zentab_extension" -- rps build web_ext
       - run: zip -r web.zip packages/zentab_extension/build/web
       - name: Release
@@ -37,7 +50,7 @@ jobs:
       - name: Clone repository
         uses: actions/checkout@v4
         with:
-          repository: 'definev/gemboard'
+          repository: 'definev/zentab'
           token: ${{ secrets.PAT }}
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
@@ -47,6 +60,19 @@ jobs:
         uses: bluefireteam/melos-action@v3
         with:
           run-bootstrap: true
+      - name: Generate production.env from secrets
+        run: melos run cicd:env
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          REVENUE_CAT_IOS_KEY: ${{ secrets.REVENUE_CAT_IOS_KEY }}
+          REVENUE_CAT_ANDROID_KEY: ${{ secrets.REVENUE_CAT_ANDROID_KEY }}
+          ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
+          IOS_GOOGLE_CLIENT_ID: ${{ secrets.IOS_GOOGLE_CLIENT_ID }}
+          ANDROID_GOOGLE_CLIENT_ID: ${{ secrets.ANDROID_GOOGLE_CLIENT_ID }}
+          WEB_GOOGLE_CLIENT_ID: ${{ secrets.WEB_GOOGLE_CLIENT_ID }}
+          WEB_GOOGLE_SERVER_CLIENT_ID: ${{ secrets.WEB_GOOGLE_SERVER_CLIENT_ID }}
+      - run: cp production.env packages/zentab/env/production.env
       - run: melos exec --scope="packages/zentab" -- rps build ios
       - run: zip -r zentab.ipa packages/zentab/build/ios/iphoneos/Runner.app
       - name: Release
@@ -60,7 +86,7 @@ jobs:
       - name: Clone repository
         uses: actions/checkout@v4
         with:
-          repository: 'definev/gemboard'
+          repository: 'definev/zentab'
           token: ${{ secrets.PAT }}
       - name: Setup JDK 11
         uses: actions/setup-java@v4
@@ -75,6 +101,19 @@ jobs:
         uses: bluefireteam/melos-action@v3
         with:
           run-bootstrap: true
+      - name: Generate production.env from secrets
+        run: melos run cicd:env
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          REVENUE_CAT_IOS_KEY: ${{ secrets.REVENUE_CAT_IOS_KEY }}
+          REVENUE_CAT_ANDROID_KEY: ${{ secrets.REVENUE_CAT_ANDROID_KEY }}
+          ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
+          IOS_GOOGLE_CLIENT_ID: ${{ secrets.IOS_GOOGLE_CLIENT_ID }}
+          ANDROID_GOOGLE_CLIENT_ID: ${{ secrets.ANDROID_GOOGLE_CLIENT_ID }}
+          WEB_GOOGLE_CLIENT_ID: ${{ secrets.WEB_GOOGLE_CLIENT_ID }}
+          WEB_GOOGLE_SERVER_CLIENT_ID: ${{ secrets.WEB_GOOGLE_SERVER_CLIENT_ID }}
+      - run: cp production.env packages/zentab/env/production.env
       - run: melos exec --scope="packages/zentab" -- rps build android
       - name: Release
         uses: softprops/action-gh-release@v2
@@ -91,7 +130,7 @@ jobs:
       - name: Clone repository
         uses: actions/checkout@v4
         with:
-          repository: 'definev/gemboard'
+          repository: 'definev/zentab'
           token: ${{ secrets.PAT }}
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
@@ -101,6 +140,19 @@ jobs:
         uses: bluefireteam/melos-action@v3
         with:
           run-bootstrap: true
+      - name: Generate production.env from secrets
+        run: melos run cicd:env
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          REVENUE_CAT_IOS_KEY: ${{ secrets.REVENUE_CAT_IOS_KEY }}
+          REVENUE_CAT_ANDROID_KEY: ${{ secrets.REVENUE_CAT_ANDROID_KEY }}
+          ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
+          IOS_GOOGLE_CLIENT_ID: ${{ secrets.IOS_GOOGLE_CLIENT_ID }}
+          ANDROID_GOOGLE_CLIENT_ID: ${{ secrets.ANDROID_GOOGLE_CLIENT_ID }}
+          WEB_GOOGLE_CLIENT_ID: ${{ secrets.WEB_GOOGLE_CLIENT_ID }}
+          WEB_GOOGLE_SERVER_CLIENT_ID: ${{ secrets.WEB_GOOGLE_SERVER_CLIENT_ID }}
+      - run: cp production.env packages/zentab/env/production.env
       - run: melos exec --scope="packages/zentab" -- rps build macos
       - run: mv packages/zentab/zentab.dmg zentab_macos.dmg
       - name: Release
